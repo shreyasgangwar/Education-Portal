@@ -125,7 +125,7 @@
   <div class="container">
      	
     <h1>Don't let any stone unturned </h1>
-    <h5>Prepare for your competitive exam and analyse your competition and your preparation with company name exam preparation program.</h5>
+    <h5>Prepare for your competitive exam and analyse your competition and your preparation with Educot's Placement Preparation Program.</h5>
   	
   </div>
   </div>
