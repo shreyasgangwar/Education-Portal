@@ -126,7 +126,7 @@
   <div class="container">
      	
     <h1>Don't let any stone unturned </h1>
-    <h5>Prepare for your competitive exam and analyse your competition and your preparation with company name exam preparation program.</h5>
+    <h5>Prepare for your competitive exam and analyse your competition and your preparation with Educot's Specific Preparation Programs.</h5>
   	
   </div>
   </div>
@@ -135,13 +135,13 @@
 
 		<section class="hire-faq">
 	<br/><br/>
-		<h1>Programs offered by <span class="educot-logo" style="color:#F44336">educot<span></h1><br/>
+		<h1>Programs offered by <span class="educot-logo" style="color:#F44336">Educot<span></h1><br/>
 		<div class="card-deck" style="margin: 20px;">
 			  <div class="card">
 					<div class="p-overview-card1"><div class="p-overview-card2-overlay"></div></div>
 				<div class="card-body">
 					<hr/>
-				  <h2 class="card-title">Educot's placement program</h2>
+				  <h2 class="card-title">Educot's Placement Program</h2>
 				  <a class="btn btn-outline-danger" name="view_1" href="placementprog.php">View</a>
 				</div>
 			  </div>
@@ -149,7 +149,7 @@
 					<div class="p-overview-card2"><div class="p-overview-card1-overlay"></div></div>
 				<div class="card-body">
 					<hr/>
-				  <h2 class="card-title">Educot's skill development program</h2>
+				  <h2 class="card-title">Educot's Skill Development Program</h2>
 				  <a class="btn btn-outline-danger" name="view_2" href="skilldevelopmentprog.php">View</a>
 				</div>
 			  </div>
@@ -157,8 +157,8 @@
 					<div class="p-overview-card3"><div class="p-overview-card3-overlay"></div></div>	
 				<div class="card-body">
 					<hr/>
-				  <h2 class="card-title">Educot's School student internship program</h2>
-				  <a class="btn btn-outline-danger" name="view_3" href="">View</a>
+				  <h2 class="card-title">Educot's Enterprenuership Program</h2>
+				  <a class="btn btn-outline-danger" name="view_3" href="enterpreneurshipprog.php">View</a>
 				</div>
 			  </div>
 		</div>
@@ -240,7 +240,7 @@
             <div class="featured-list-icon ">
               <span class="icon icon-hour-glass"><i class="material-icons md-24" style="color:#F44336">check_circle</i></span>
             </div>
-            <p class="featured-list-icon-text2 mb-0"><strong>practice more than thousands of questions</strong></p>
+            <p class="featured-list-icon-text2 mb-0"><strong>Practice more than thousands of questions</strong></p>
             
           </li>
         </ul>
