@@ -166,134 +166,106 @@ if($r3!=null)
 <body>
 
 
-<nav class="navbar fixed-top navbar-toggleable-md navbar-inverse">
+  <nav class="navbar fixed-top navbar-toggleable-md navbar-inverse">
 
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 
-        <span class="navbar-toggler-icon"></span>
+    <span class="navbar-toggler-icon"></span>
 
-    </button>
+</button>
 
-    <div class="container">
-        <div class="row">
-            <a class="navbar-brand" href="studentDashboard.php"><img class="img-responsive" src="images/logo.png" alt="logo"></a>
-            <h2 style="color:white;" class="educot-logo">educot</h2>
-        </div></div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<div class="container">
+<div class="row">
+<a class="navbar-brand" href="studentDashboard.php"><img class="img-responsive" src="images/logo.png" alt="logo"></a>
+<h2 style="color:white;" class="educot-logo">educot</h2>
+</div></div>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto">
 
-            <li class="nav-item active">
+        <li class="nav-item active">
 
-                <a class="nav-link" href="studentDashboard.php"><i class="fa fa-home" aria-hidden="true"></i> Home<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="studentDashboard.php"><i class="fa fa-home" aria-hidden="true"></i> Home<span class="sr-only">(current)</span></a>
 
-            </li>
+        </li>
 
-            <li class="nav-item active dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-book" aria-hidden="true"></i>Subjects/Classes
+       <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-book" aria-hidden="true"></i>Programs offered
+          </a>
+          <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
+  <div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <span class="text-uppercase">Programs </span>
+      <div class="dropdown-divider"></div>
+      <ul class="nav flex-column">
+      <li class="dropdown-item">
+        <a class="" href="#">Educot's placement program</a>
+      </li>
+      <li class="dropdown-item">
+        <a class="" href="#">Educot's skill development program</a>
+      </li>
+      <li class="dropdown-item">
+        <a class="" href="#">Educot's School student internship program</a>
+      </li>
+      
+
+      </ul>
+    </div>
+    
+  </div>
+  </div>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item disabled" href="#">More Programs coming soon</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+
+            <a class="nav-link" href="hire.php"><i class="fa fa-superpowers" aria-hidden="true"></i> Hire Talent</a>
+
+        </li>
+
+
+        <li class="nav-item">
+
+            <a class="nav-link divider" href="instructorRegister.php"><i class="fa fa-envelope" aria-hidden="true"></i> Instructors</a>
+
+        </li>
+        <?php if(null==$_SESSION){?>
+            <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
+        <?php } else { ?>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
+                    <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
                 </a>
+
                 <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-3">
-                                <span class="text-uppercase">Classes</span>
+                                <span class="text-uppercase">DETAILS</span>
                                 <div class="dropdown-divider"></div>
                                 <ul class="nav flex-column">
                                     <li class="dropdown-item">
-                                        <a class="" href="#">Class 6</a>
+                                        <a class="" href="logout.php">Logout</a>
                                     </li>
                                     <li class="dropdown-item">
-                                        <a class="" href="#">Class 7</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 8</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 9</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 10</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 11</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 12</a>
+                                        <a class="" href="#">Recent Details</a>
                                     </li>
 
                                 </ul>
                             </div>
-                            <div class="col-md-3">
-                                <span class="text-uppercase">Subjects</span>
-                                <div class="dropdown-divider"></div>
-                                <ul class="nav flex-column">
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Science</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Maths</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Social Studies</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Computer Science</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Aptitude</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item disabled" href="#">More Subjects coming soon</a>
                 </div>
-            </li>
+            </li><?php } ?>
 
-            <li class="nav-item active">
+    </ul>
+</div>
 
-                <a class="nav-link" href="aboutus.php"><i class="fa fa-superpowers" aria-hidden="true"></i>About Us</a>
-
-            </li>
-
-            <li class="nav-item active">
-
-                <a class="nav-link divider" href="contactus.php"><i class="fa fa-envelope" aria-hidden="true"></i> Contact Us</a>
-
-            </li>
-            <?php if(null==$_SESSION){?>
-                <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
-            <?php } else { ?>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
-                        <i class="fa fa-user" aria-hidden="true"></i><?php  echo ($r3['first_name']);  ?>
-                    </a>
-
-                    <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <span class="text-uppercase">DETAILS</span>
-                                    <div class="dropdown-divider"></div>
-                                    <ul class="nav flex-column">
-                                        <li class="dropdown-item">
-                                            <a class="" href="logout.php">Logout</a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a class="" href="#">Recent Details</a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li><?php } ?>
-        </ul>
-    </div>
 </nav>
 <br/><br/>
 
@@ -348,32 +320,40 @@ if($r3!=null)
             </nav>
         </div>
     </div></div>
+    <br/>
+    <div class="container">
+    <a class="btn btn-outline-danger" href="jobsinternship.php" role="button">Apply for Jobs</a>
+    </div>
     <br/><br/>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-jobs" role="tabpanel" aria-labelledby="nav-jobs-tab">
     <?php
-    $query= "SELECT * FROM companyrequirement";
+    $id=$r3['id'];
+    $query= "SELECT * FROM jobapplications where student_id='$id' ";
     $featured= $link->query($query);
     if($featured)
     {
     while($product = mysqli_fetch_assoc($featured)):
-        $companyid = $product['company_id'];
-        $q3 = "SELECT * From hire WHERE company_id='$companyid'";
+        $jobid = $product['job_id'];
+        $q3 = "SELECT * From companyrequirement WHERE Subject_id='$jobid'";
         $r4=mysqli_query($link,$q3);
-        $imagei=mysqli_fetch_assoc($r4);
+        $data=mysqli_fetch_assoc($r4);
+        $company_id=$data['company_id'];
+        $imagei=mysqli_fetch_assoc(mysqli_query($link,"SELECT * FROM hire where company_id='$company_id'"));
         $imageid=$imagei["image_id"];
         $q4=mysqli_query($link,"SELECT image_path FROM image WHERE id='$imageid'");
         $r5=mysqli_fetch_assoc($q4);
         $r5=$r5["image_path"];
         $companyname = $imagei['company_name'];
         $des = $imagei['description'];
-        $salary = $product['salary'];
-        $experience= $product['experience'];
-        $domainname= $product['domain_name'];
-        $duration= $product['duration'];
-        $candidate= $product['no_candidate'];
-        $takex = $product['takeExam'];
+        $salary = $data['salary'];
+        $experience= $data['experience'];
+        $domainname= $data['domain_name'];
+        $duration= $data['duration'];
+        $candidate= $data['no_candidate'];
+        $takex = $data['takeExam'];
         ?>
+        <?php if($takex=='yes'){?>
         <div class="container"> <div class="job-card">
             <div class="row">
                 <div class="col-sm-8">
@@ -391,19 +371,35 @@ if($r3!=null)
                         <h6>Joining/Duration: <?php echo($duration);
 
                             ?></h6><br/>
-
-                        <a class="btn btn-outline-danger" href="examInstructions.php<?php
-                        echo "?company_id=".$companyid."&domain_name=".$domainname;
-                        ?>" role="button">
-                            <?php if($takex=='yes'){
-
-                                echo "Apply for Exam";
-                            }else{
-                                echo "Upload Resume";
-                            }?></a></div>
+                    </div>
                 </div>
             </div>
-            </div></div><br>
+        </div>
+        <?php } 
+        else{?>
+            <div class="container"> <div class="job-card">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div>
+                        <img src="<?php echo($r5); ?>" style="float:left; height:100px; width:100px;margin:10px; border-radius: 50%;">
+                        <h3 style="padding:5px; margin:5px;"><?php echo($companyname);?></h3>
+                        <h6 style="padding:5px; margin:5px;"><?php echo($des);?></h6>
+                    </div><br/><hr>
+                    <h6 style="padding:5px; margin:5px; color: #F44336; float:left;"><i class="fa fa-briefcase" aria-hidden="true"></i> Experience :<?php echo($experience);?></h6>
+                    <h6 style="padding:5px; margin:5px; color: #F44336; float:left;"><i class="fa fa-money" aria-hidden="true"></i> Salary: <?php echo($salary);?></h6>
+                </div>
+                <div class="col-sm-4">
+                    <div class="apply-post">
+                        <h4><?php echo($domainname);?></h4>
+                        <h6>Joining/Duration: <?php echo($duration);
+
+                            ?></h6><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php }?>
+    </div><br>
         <?php endwhile;?>
         <?php }
         else {?>
