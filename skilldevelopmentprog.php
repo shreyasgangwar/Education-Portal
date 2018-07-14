@@ -125,14 +125,14 @@
   <div class="container">
      	
     <h1>Don't let any stone unturned </h1>
-    <h5>Prepare for your competitive exam and analyse your competition and your preparation with company name exam preparation program.</h5>
+    <h5>Prepare for your competitive exam and analyse your competition and your preparation with Educot's Skill Development Program.</h5>
   	
   </div>
   </div>
   
 </div>
 <section class="abt2">
-	<h1 class="feature_heading2 educot-logo" >Educot’s skill development program</h1>
+	<h1 class="feature_heading2 educot-logo" >Educot’s Skill Development Program</h1>
 	<h2 class="feature_heading2 educot-logo" >Project Based Training with EDUCOT<br> ( WORK FORM HOME )
 </h2>
 	<div style="margin:20px;">
@@ -223,7 +223,6 @@ After graduating you will have enough professional skills and experience to get 
       <script type="text/javascript">
     function checkScroll(){
     var startY = $('.navbar').height() * 2; //The point where the navbar changes in px
-
         if($(window).scrollTop() > startY){
             $('.navbar').addClass("scrolled");
         }else{
@@ -232,7 +231,6 @@ After graduating you will have enough professional skills and experience to get 
     }
             
     
-
     if($('.navbar').length > 0){
         $(window).on("scroll load resize", function(){
             checkScroll();
@@ -263,7 +261,6 @@ After graduating you will have enough professional skills and experience to get 
 			css.innerHTML = ".txt-rotate > .wrap { border-right: 10px solid #ffffff }";
 			document.body.appendChild(css);
 		};
-
 		var TxtRotate = function(el, toRotate, period) {
 			this.toRotate = toRotate;
 			this.el = el;
@@ -273,26 +270,20 @@ After graduating you will have enough professional skills and experience to get 
 			this.tick();
 			this.isDeleting = false;
 		};
-
 		TxtRotate.prototype.tick = function() {
 			var i = this.loopNum % this.toRotate.length;
 			var fullTxt = this.toRotate[i];
-
 			if (this.isDeleting) {
 				this.txt = fullTxt.substring(0, this.txt.length - 1);
 			} else {
 				this.txt = fullTxt.substring(0, this.txt.length + 1);
 			}
-
 			this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
 			var that = this;
 			var delta = 200 - Math.random() * 100;
-
 			if (this.isDeleting) {
 				delta /= 2;
 			}
-
 			if (!this.isDeleting && this.txt === fullTxt) {
 				delta = this.period;
 				this.isDeleting = true;
@@ -301,13 +292,10 @@ After graduating you will have enough professional skills and experience to get 
 				this.loopNum++;
 				delta = 200;
 			}
-
 			setTimeout(function() {
 				that.tick();
 			}, delta);
 		};
-
-
     </script>
     </body>
 </html>	
