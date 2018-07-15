@@ -1,3 +1,89 @@
+<?php
+require_once ('conn.php');
+if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+    if(session_id() == '') {session_start();}
+} else  {
+    if (session_status() == PHP_SESSION_NONE) {session_start();}
+}
+$email=$_SESSION['email'];
+$q2="SELECT * From instructor WHERE email='$email'";
+$r2=mysqli_query($link,$q2);
+$r3=mysqli_fetch_assoc($r2);
+if($r3!=null)
+{
+    $imageid=$r3["image_id"];
+    $query=mysqli_query($link,"SELECT image_path FROM image WHERE id='$imageid'");
+    $result1=mysqli_fetch_assoc($query);
+    $image_path=$result1["image_path"];
+    if(array_key_exists('submit', $_POST)){
+        if(isset($_POST['name']))
+            $name=$_POST['name'];
+        if(isset($_POST['dob']))
+            $dob=$_POST['dob'];
+        if(isset($_POST['college']))
+            $coll=$_POST['college'];
+        if(isset($_POST['contact']))
+            $contact=$_POST['contact'];
+        if(isset($_POST['email']))
+            $email=$_POST['email'];
+        if(isset($_POST['qualification']))
+            $qualification=$_POST['qualification'];
+        if(isset($_POST['pass']))
+            $pass=$_POST['pass'];
+        if(isset($_POST['re_pass']))
+            $re_pass=$_POST['re_pass'];
+            $filesize=0;
+        if(isset($_FILES["Upload"]))
+        {
+            $filename = $_FILES["Upload"]['name'];
+            $filetmp = $_FILES["Upload"]['tmp_name'];
+            $filesize = $_FILES["Upload"]['size'];
+            $file_basename = basename($_FILES["Upload"]['name']);
+            $dir="images/";
+            $final_dir=$dir.$file_basename;
+
+        }
+        if (strlen($contact)<10)
+        {
+            $error.="Please Enter valid numbers";
+        }
+        else if($pass!=$re_pass){
+            $error.= " Passwords do not match";
+        }
+        else if($filesize >1000000)
+        {
+            $error.="File size too large";
+        }
+        else{
+            if(!isset($_FILES["Upload"]))
+            {
+                $id1=$r3['image_id'];
+            }
+            else
+            {
+                move_uploaded_file($filetmp,$final_dir);
+                $iquery="INSERT INTO image(image_name,image_path) VALUES ('$filename','$final_dir');";
+                $result4=$link->query($iquery);
+                $fetchid = null;
+                $fetchid="SELECT * FROM image WHERE image_path ='$final_dir' ;";
+                $result2=$link->query($fetchid);
+                $row = $result2->fetch_assoc();
+                $id1 = $row["id"];
+            }
+            $pass=md5($pass);
+            $id2=$r3['instructor_id'];
+            $query="UPDATE instructor SET  name='$name',dob='$dob', college='$coll', contact='$contact',image_id='$id1', qualification='$qualification', password='$pass' WHERE instructor_id= '$id2'";
+            $result=mysqli_query($link, $query);
+            if(!$result){
+                $error.=" Some error in database connection:". mysqli_error($link);
+            }
+            else{
+                $error="Form submitted successfully !";
+                header("location: instructorDashboard.php");
+            }
+        }
+    }
+?>
 <html>
 <head>
     <title>Instructor Profile</title>
@@ -14,7 +100,6 @@
     <link rel="stylesheet" href="style/slider-def.css">
     <link href="css/main.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Mirza" rel="stylesheet">
-<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <!-- Bootstrap CSS -->
     <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Merienda" rel="stylesheet">
@@ -187,151 +272,129 @@
 
 <nav class="navbar fixed-top navbar-toggleable-md navbar-inverse">
 
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 
-        <span class="navbar-toggler-icon"></span>
+    <span class="navbar-toggler-icon"></span>
 
-    </button>
+</button>
 
-    <div class="container">
-        <div class="row">
-            <a class="navbar-brand" href="home.php"><img class="img-responsive" src="images/logo.png" alt="logo"></a>
-            <h2 style="color:white;" class="educot-logo">educot</h2>
-        </div></div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<div class="container">
+<div class="row">
+<a class="navbar-brand" href="studentDashboard.php"><img class="img-responsive" src="images/logo.png" alt="logo"></a>
+<h2 style="color:white;" class="educot-logo">educot</h2>
+</div></div>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto">
 
-            <li class="nav-item active">
+        <li class="nav-item active">
 
-                <a class="nav-link" href="index.php"><i class="fa fa-home" aria-hidden="true"></i> Home<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="studentDashboard.php"><i class="fa fa-home" aria-hidden="true"></i> Home<span class="sr-only">(current)</span></a>
 
-            </li>
+        </li>
 
-            <li class="nav-item active dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-book" aria-hidden="true"></i>Subjects/Classes
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-book" aria-hidden="true"></i>Programs offered
+        </a>
+        <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
+<div class="container">
+<div class="row">
+    <div class="col-md-3">
+    <span class="text-uppercase">Programs </span>
+    <div class="dropdown-divider"></div>
+    <ul class="nav flex-column">
+    <li class="dropdown-item">
+        <a class="" href="#">Educot's placement program</a>
+    </li>
+    <li class="dropdown-item">
+        <a class="" href="#">Educot's skill development program</a>
+    </li>
+    <li class="dropdown-item">
+        <a class="" href="#">Educot's School student internship program</a>
+    </li>
+    
+
+    </ul>
+    </div>
+    
+</div>
+</div>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item disabled" href="#">More Programs coming soon</a>
+        </div>
+        </li>
+
+        <li class="nav-item">
+
+            <a class="nav-link" href="hire.php"><i class="fa fa-superpowers" aria-hidden="true"></i> Hire Talent</a>
+
+        </li>
+
+
+        <li class="nav-item">
+
+            <a class="nav-link divider" href="instructorRegister.php"><i class="fa fa-envelope" aria-hidden="true"></i> Instructors</a>
+
+        </li>
+        <?php if(null==$_SESSION){?>
+            <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
+        <?php } else { ?>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
+                    <i class="fa fa-user" aria-hidden="true"></i> <?php echo($r3['name']); ?>
                 </a>
+
                 <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-3">
-                                <span class="text-uppercase">Classes</span>
+                                <span class="text-uppercase">DETAILS</span>
                                 <div class="dropdown-divider"></div>
                                 <ul class="nav flex-column">
                                     <li class="dropdown-item">
-                                        <a class="" href="#">Class 6</a>
+                                        <a class="" href="logout.php">Logout</a>
                                     </li>
                                     <li class="dropdown-item">
-                                        <a class="" href="#">Class 7</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 8</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 9</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 10</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 11</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Class 12</a>
+                                        <a class="" href="#">Recent Details</a>
                                     </li>
 
                                 </ul>
                             </div>
-                            <div class="col-md-3">
-                                <span class="text-uppercase">Subjects</span>
-                                <div class="dropdown-divider"></div>
-                                <ul class="nav flex-column">
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Science</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Maths</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Social Studies</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Computer Science</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Aptitude</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item disabled" href="#">More Subjects coming soon</a>
                 </div>
-            </li>
+            </li><?php } ?>
 
-            <li class="nav-item active">
+    </ul>
+</div>
 
-                <a class="nav-link" href="aboutus.php"><i class="fa fa-superpowers" aria-hidden="true"></i>About Us</a>
-
-            </li>
-
-            <li class="nav-item active">
-
-                <a class="nav-link divider" href="contactus.php"><i class="fa fa-envelope" aria-hidden="true"></i> Contact Us</a>
-
-            </li>
-            <?php if(null==$_SESSION){?>
-                <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
-            <?php } else { ?>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
-                        <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
-                    </a>
-
-                    <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <span class="text-uppercase">DETAILS</span>
-                                    <div class="dropdown-divider"></div>
-                                    <ul class="nav flex-column">
-                                        <li class="dropdown-item">
-                                            <a class="" href="logout.php">Logout</a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a class="" href="#">Recent Details</a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li><?php } ?>
-        </ul>
-    </div>
 </nav>
 <br/><br/>
 
 <div class="container" style="margin-top: 7%">
+    <?php
+    if($error!='')
+    {
+        echo '<div class="alert alert-danger" role="alert">'.$error.'</div><br>';
+    }
+    ?>
   <div class="row profile">
     <div class="col-md-3">
       <div class="profile-sidebar">
         <!-- SIDEBAR USERPIC -->
         <div class="profile-userpic" align="center">
-              <img class="rounded-circle media-object" src="images/educot-logo-red.png" style="height: 20%">
+              <img class="rounded-circle media-object" src="<?php echo($image_path);?>" style="height: 20%">
         </div>
             <!-- END SIDEBAR USERPIC -->
             <!-- SIDEBAR USER TITLE -->
         <div class="profile-usertitle">
           <div class="profile-usertitle-name">
-              Instructor's Name
+          <?php echo($r3['name']); ?>
           </div>
           <div class="profile-usertitle-job">
-              Developer
+          <?php echo($r3['qualification']); ?>
           </div>
         </div>
         <nav class="profile-usermenu">
@@ -378,53 +441,53 @@
                   </div>
                   <h3>Personal info</h3>
                   
-                  <form class="form-horizontal" role="form">
+                  <form class="form-horizontal" role="form" method="post">
                     <div class="form-group">
                       <label class="col-md-3 control-label">Name:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="text" value="Jane">
+                        <input class="form-control" type="text" value="<?php echo($r3['name']);?>" name="name">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3 control-label">DOB:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="date" value="">
+                        <input class="form-control" type="date" value="<?php echo($r3['dob']);?>" name="dob">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3 control-label">Email:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="Email" value="janesemail@gmail.com">
+                        <input class="form-control" type="Email" value="<?php echo($r3['email']);?>" name="email">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3 control-label">Contact No:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="number" value="1212121221">
+                        <input class="form-control" type="number" value="<?php echo($r3['contact']);?>" name="contact">
                       </div>
                     </div>             
                     <div class="form-group">
                       <label class="col-md-3 control-label">College:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="text" value="">
+                        <input class="form-control" type="text" value="<?php echo($r3['college']);?>" name="college">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3 control-label">Qualification:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="text" value="">
+                        <input class="form-control" type="text" value="<?php echo($r3['qualification']);?>" name="qualification">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3 control-label">Password:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="password" value="11111122333">
+                        <input class="form-control" type="password" value="<?php echo($r3['password']);?>" name="pass">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-md-3 control-label">Confirm password:</label>
                       <div class="col-md-8">
-                        <input class="form-control" type="password" value="11111122333">
+                        <input class="form-control" type="password" value="<?php echo($r3['password']);?>" name="re_pass">
                       </div>
                     </div><br>
                     <div class="fileupload fileupload-new" data-provides="fileupload" align="center">
@@ -438,8 +501,8 @@
                     </div>
                     
                     <div class="form-group">
-                      <div class="col-md-9" align="center">
-                        <input type="button" class="btn btn-primary btn-lg" value="Save Changes">
+                      <div class="col-md-12" align="center">
+                        <button type="submit " class="btn btn-primary" value="Save Changes" name="submit">Save Changes</button>
                       </div>
                     </div>
                   </form>
@@ -574,3 +637,6 @@
   </script>
 </body>
 </html>
+<?php }
+else
+header('location: login.php');?>
