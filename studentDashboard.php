@@ -12,6 +12,7 @@ $r3=mysqli_fetch_assoc($r2);
 if($r3!=null)
 {
     $imageid=$r3["image_id"];
+    $idd=$r3["id"];
     $query=mysqli_query($link,"SELECT image_path FROM image WHERE id='$imageid'");
     $result1=mysqli_fetch_assoc($query);
     $result1=$result1["image_path"];
@@ -239,7 +240,7 @@ if($r3!=null)
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
-                    <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
+                    <i class="fa fa-user" aria-hidden="true"></i> <?php echo($r3['first_name']);?>
                 </a>
 
                 <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
@@ -321,12 +322,14 @@ if($r3!=null)
         </div>
     </div></div>
     <br/>
-    <div class="container">
-    <a class="btn btn-outline-danger" href="jobsinternship.php" role="button">Apply for Jobs</a>
-    </div>
+    
     <br/><br/>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-jobs" role="tabpanel" aria-labelledby="nav-jobs-tab">
+    <div class="container">
+    <a class="btn btn-outline-danger" href="jobsinternship.php" role="button">Apply for Jobs</a>
+    </div>
+    <br/>
     <?php
     $id=$r3['id'];
     $query= "SELECT * FROM jobapplications where student_id='$id' ";
@@ -514,7 +517,43 @@ if($r3!=null)
         <hr>
     </div>
     <div class="tab-pane fade" id="nav-course" role="tabpanel" aria-labelledby="nav-course-tab">
-        <p><h1 align="center">No Course Applied</h1></p>
+    <div class="container">
+    <a class="btn btn-outline-danger" href="courses.php" role="button">Apply for Courses</a>
+    </div>
+    <?php
+        $query= " SELECT * FROM course where course_id in (Select course_id from courseapplication where student_id= '$idd'); ";
+        $featured= $link->query($query);
+        if($featured)
+        {
+            while($product = mysqli_fetch_assoc($featured)):
+                
+                ?>
+        <div class="container"> <div class="job-card">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div>
+                        <h3 style="padding:5px; margin:5px;"><?php echo($product['Course_title']);?></h3>
+                        <h6 style="padding:5px; margin:5px;"><?php echo($product['About_course']);?></h6>
+                    </div><br/><hr>
+                    <h6 style="padding:5px; margin:5px; color: #F44336; float:left;"><i class="fa fa-briefcase" aria-hidden="true"></i> Audience :<?php echo($product['Audience']);?></h6>
+                    <h6 style="padding:5px; margin:5px; color: #F44336; float:left;"><i class="fa fa-money" aria-hidden="true"></i> Level: <?php echo($product['Level']);?></h6>
+                </div>
+                <div class="col-sm-4">
+                    <div class="apply-post">
+                        <h6>Duration: <?php echo($product['Hours']);
+
+                            ?></h6><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+                <br/>
+
+            <?php endwhile;
+        }else{?>
+            <p><h1 align="center">No Course Applied</h1></p>
+            <?php }?>
     </div>
 </div>
 <br/>

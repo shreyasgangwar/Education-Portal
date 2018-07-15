@@ -6,7 +6,7 @@ if (version_compare(PHP_VERSION, '5.4.0', '<')) {
     if (session_status() == PHP_SESSION_NONE) {session_start();}
 }
 $email=$_SESSION['email'];
-$q2="SELECT name,password From instructor WHERE email='$email'";
+$q2="SELECT * From instructor WHERE email='$email'";
 $r2=mysqli_query($link,$q2);
 $r3=mysqli_fetch_assoc($r2);
 if($r3!=null)
@@ -22,52 +22,29 @@ if($r3!=null)
                 $about=$_POST['about_course'];
             if(isset($_POST['audience']))
                 $audience=$_POST['audience'];
-            if(isset($_POST['instructor']))
-                $coll=$_POST['instructor'];
             if(isset($_POST['level']))
-                $contact=$_POST['level'];
+                $level=$_POST['level'];
             if(isset($_POST['lang']))
                 $lang=$_POST['lang'];
+                if(isset($_POST['link']))
+                $lnk=$_POST['link'];
             if(isset($_POST['hrs_req']))
                 $hrs=$_POST['hrs_req'];
             if(isset($_POST['pass']))
                 $pass=$_POST['pass'];
-            if($c_name!="" && $c_name==$about_course){
-                $error.= " Both are same";
-            }
-            elseif (strlen($contact)<10)
-            {
-                $error.="Please Enter valid numbers";
-            }
-            else if($pass!=$re_pass){
-                $error.= " Passwords do not match";
+            if(md5($pass)!=$r3['password']){
+                $error.= "Wrong Password.";
             }
             else{
-                if(!file_exists($_FILES['Upload']['tmp_name']) || !is_uploaded_file($_FILES['Upload']['tmp_name']))
-                {
-                    $id1=$r3['image_id'];
-                }
-                else
-                {
-                    move_uploaded_file($filetmp,$final_dir);
-                    $iquery="INSERT INTO image(image_name,image_path) VALUES ('$filename','$final_dir');";
-                    $result4=$link->query($iquery);
-                    $fetchid = null;
-                    $fetchid="SELECT * FROM image WHERE image_path ='$final_dir' ;";
-                    $result2=$link->query($fetchid);
-                    $row = $result2->fetch_assoc();
-                    $id1 = $row["id"];
-                }
-                $pass=md5($pass);
-                $id2=$r3['id'];
-                $query="INSERT into course values Course Title='$cname', About Course='$about',Audience='$audience', instructor_id='$coll', Level='$level', language='$lang',hours='$hrs', link='$link', password='$pass'";
-                $result=mysqli_query($link, $query);
+                $id2=$r3['instructor_id'];
+                $query= " INSERT INTO course (Course_title, About_course, Audience, instructor_id, Level, Language, Hours, Link) VALUES ('$cname','$about','$audience','$id2','$level','$lang','$hrs','$lnk'); " ;
+                $result=$link->query($query);
                 if(!$result){
                     $error.=" Some error in database connection:". mysqli_error($link);
                 }
                 else{
                     $error="Form submitted successfully !";
-                    header("location: studentDashboard.php");
+                    header("location: instructorDashboard.php");
                 }
             }
         }
@@ -217,7 +194,7 @@ if($r3!=null)
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
-                    <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
+                    <i class="fa fa-user" aria-hidden="true"></i> <?php echo($r3['name']);?>
                 </a>
 
                 <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
@@ -245,9 +222,17 @@ if($r3!=null)
 </div>
 
 </nav>
-<br/><br/>
+<br/><br/><br/>
+<br/>
 
 <!-- edit form column -->
+<?php
+                        if($error!="")
+                        {
+                            echo '<div class="alert alert-danger" role="alert">'.$error.'</div><br>';
+                        }
+                        ?>
+            <form method="post" enctype="multipart/formdata">
                 <div class="col-md-12" align="center">
                    <br><br><br>
                    <h2>Create a New Course Here</h2>
@@ -257,7 +242,7 @@ if($r3!=null)
                         <div class="row">
                             <div class="col-md-3" align="right"><h5>Course Title</h5></div>
                             <div class="col-md-5">
-                                <input class="form-control" name="c_name" type="text" value="<?php echo ($r3['course_title']); ?>">
+                                <input class="form-control" name="c_name" type="text" value="">
                             </div>
                             </div>
                         </div><br>
@@ -267,7 +252,7 @@ if($r3!=null)
                         <div class="row">
                             <div class="col-md-3" align="right"><h5>About Course</h5></div>
                             <div class="col-md-5">
-                                <input class="form-control" name="about_course" type="textarea" value="<?php echo ($r3['abt_course']); ?>">
+                                <input class="form-control" name="about_course" type="textarea" value="">
                             </div>
                         </div>
                         </div>
@@ -275,7 +260,7 @@ if($r3!=null)
                         <div class="row">
                             <div class="col-md-3" align="right"><h5>Intended Audience</h5></div>
                             <div class="col-md-5">
-                                <input class="form-control" name="audience" type="textarea" value="<?php echo ($r3['audience']); ?>">
+                                <input class="form-control" name="audience" type="textarea" value="">
                             </div>
                         </div>
                         </div>
@@ -283,15 +268,15 @@ if($r3!=null)
                         <div class="row">
                             <div class="col-md-3" align="right"><h5>Created By </h5></div>
                             <div class="col-md-5">
-                                <input class="form-control" name="instructor" type="text" value="<?php echo ($r3['instructor']); ?>"> <kbd style="background-color: red"> Can not Change </kbd>
+                                <text class="form-control" name="instructor" type="text" value=""> <kbd style="background-color: red " align="right"> <?php echo($r3['name']);?> </kbd></text>
                             </div>
                         </div>
                         </div><br>
                         <h4 align="left">Basic Info and Pre-requisite</h4>
                         <div class="form-group">
                         <div class="row">
-                            <div class="col-md-3" align="right" name="level" value="<?php echo ($r3['level']); ?>"><h5>Level</h5></div>
-                            <select  class="col-md-5">
+                            <div class="col-md-3" align="right" value=""><h5>Level</h5></div>
+                            <select  name="level" class="col-md-5">
                                 <option value="begin">Beginner</option>
                                 <option value="intermediate">Intermediate</option>
                                 <option value="adv">Advanced</option>
@@ -300,10 +285,10 @@ if($r3!=null)
                         </div>
                         <div class="form-group">
                         <div class="row">
-                            <div class="col-md-3" align="right" name="lang" value="<?php echo ($r3['lang']); ?>"><h5>Language</h5></div>
-                            <select  class="col-md-5">
-                                <option value="eng">English</option>
-                                <option value="hindi">Hindi</option>
+                            <div class="col-md-3" align="right" value=""><h5>Language</h5></div>
+                            <select name="lang" class="col-md-5">
+                                <option   value="eng">English</option>
+                                <option  value="hindi">Hindi</option>
                             </select>
                         </div>
                         </div>
@@ -311,7 +296,14 @@ if($r3!=null)
                         <div class="row">
                             <div class="col-md-3" align="right"><h5>Hours Required</h5></div>
                             <div class="col-md-5">
-                                <input class="form-control" name="hrs_req" type="number" value="<?php echo ($r3['hrs_req']); ?>">
+                                <input class="form-control" name="hrs_req" type="number" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3" align="right"><h5>YOUTUBE Link</h5></div>
+                            <div class="col-md-5">
+                                <input class="form-control" name="link" type="textarea" value="">
                             </div>
                         </div>
                         </div>

@@ -259,11 +259,9 @@ if($r3!=null)
     width: 40%;
     margin: 2%;
 }
-
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
-
 .container {
     padding: 2px 16px;
 }
@@ -420,29 +418,36 @@ if($r3!=null)
       <div class="profile-content">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
-             <p><h1 align="center">No Courses Offered Yet</h1>
-                
-                <div class="col-md-9 container">
-                <div class="row">   
-                <div><a href="createCourse.php">
+          <div ><a class="btn btn-outline-danger" href="createCourse.php">ADD
                     <span class="glyphicon glyphicon-plus"></span>
                 </a></div>
-                <div class="col-md-4 card" style="width:40%">
+                <div class="col-md-12 container"> 
+                  <div class="row">
+            <?php
+            $id=$r3['instructor_id'];
+            $query= "SELECT * FROM course where instructor_id='$id' ";
+            $featured= $link->query($query);
+            if($featured)
+            {
+            while($product = mysqli_fetch_assoc($featured)):
+                $title=$product['Course_title'];?>
+
+                
+                <div class="col-md-5 card" style="width:50%">
                     <div class="container">
-                        <h4><b>Course 1</b></h4> 
-                        <p>Stream</p> 
+                        <h4><b><?php echo($title);?></b></h4> 
+                        <p><?php echo($product['Level']);?></p> 
                     </div>
                 </div>
-                <div class="col-md-4 card" style="width:40% " margin="10%">
-                    <div class="container">
-                        <h4><b>Course 2</b></h4> 
-                        <p>Stream</p> 
-                    </div>
-                </div>
-                </div>
-
-
-
+               
+        
+            <?php endwhile;
+            }
+            else{?>
+            <p><h1 align="center">No Courses Offered Yet</h1>
+            <?php }?>
+            </div>
+            </div>
              </p>
           </div>
           <div class="tab-pane fade" id="nav-account" role="tabpanel" aria-labelledby="nav-account-tab">
@@ -531,7 +536,46 @@ if($r3!=null)
           <hr>
           </div>
           <div class="tab-pane fade" id="nav-students" role="tabpanel" aria-labelledby="nav-students-tab">
-             <p><h1 align="center">No Students Enrolled</h1></p>
+         
+
+         <?php $id=$r3['instructor_id'];
+            $query= "SELECT * FROM courseapplication where instructor_id='$id'";
+            $featured= $link->query($query);
+            if($featured)
+            {?>
+                <div class="container">
+                <h2>Student Details</h2>
+                <p>Here is a list of Students.</p>            
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>   
+                   
+                <?php $no=1;
+                while($product = mysqli_fetch_assoc($featured)):
+                    $student_id=$product['student_id'];
+                    $q= "SELECT * FROM user where id='$student_id'";
+                    $f= $link->query($q);
+                    $f=mysqli_fetch_assoc($f);    ?>
+
+                    <tr>
+                      <td><?php echo($no++);?></td>
+                      <td><?php echo($f['first_name']);?></td>
+                      <td><?php echo($f['email']);?></td>
+                    </tr>
+
+             <?php endwhile;?>
+             </tbody>
+                </table>
+              </div>
+         <?php }else{?>
+            <p><h1 align="center">No Students Enrolled</h1></p>
+            <?php }?>
           </div>
         </div>
       </div>
