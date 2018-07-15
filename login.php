@@ -13,7 +13,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     $result = mysqli_query($link,$sql);
     $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
     $active = $row['active'];
-    $error.="gandu1";
+    $error.="";
     if($row==null)
     {
         $sql = "SELECT company_id FROM hire WHERE (company_email = '$email' and password = '$pass')";
@@ -34,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         }
         else
         {
-            $error.="gandu";
+            $error.="";
             $sql = "SELECT instructor_id FROM instructor WHERE (email = '$email' and password = '$pass')";
             $result = mysqli_query($link,$sql);
             $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -50,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                     setcookie('email',$email,'time()*60*60*7');
                     setcookie('password',$pass,'time()*60*60*7');
                 }
-                header("location: index.php");
+                header("location: instructorDashboard.php");
             }
             else
             {
