@@ -41,7 +41,6 @@ if($r3!=null)
             $file_basename = basename($_FILES["Upload"]['name']);
             $dir="images/";
             $final_dir=$dir.$file_basename;
-
         }
         if (strlen($contact)<10)
         {
@@ -93,6 +92,7 @@ if($r3!=null)
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
     <link href="css/toolkit.css" rel="stylesheet">
     
@@ -167,12 +167,8 @@ if($r3!=null)
       .profile-userbuttons .btn:last-child {
         margin-right: 0px;
       }          
-
-
-
       @font-face {
         font-family: 'Glyphicons Halflings';
-
         src: url('../fonts/glyphicons-halflings-regular.eot');
         src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
       }
@@ -200,31 +196,25 @@ if($r3!=null)
       .profile-usermenu ul li {
         border-bottom: 1px solid #f0f4f7;
       }
-
       .profile-usermenu ul li:last-child {
         border-bottom: none;
       }
-
       .profile-usermenu ul li a {
         color: #93a3b5;
         font-size: 14px;
         font-weight: 400;
       }
-
       .profile-usermenu ul li a i {
         margin-right: 8px;
         font-size: 14px;
       }
-
       .profile-usermenu ul li a:hover {
         background-color: #fafcfd;
         color: #5b9bd1;
       }
-
       .profile-usermenu ul li.active {
         border-bottom: none;
       }
-
       .profile-usermenu ul li.active a {
         color: #5b9bd1;
         background-color: #f6f9fb;
@@ -243,23 +233,18 @@ if($r3!=null)
         .fileupload-new .input-append .btn-file{-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0;}
         .thumbnail-borderless .thumbnail{border:none;padding:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
         .fileupload-new.thumbnail-borderless .thumbnail{border:1px solid #ddd;}
-
         body {
         width: 1px;
         min-width: 100%;
         *width: 100%;
         }
         body{
-
             font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
         }
         .navbar {
-
             background: #F44336 !important;
             background: rgba(0, 0, 0, 0.78); /*NON-IE*/
-
         }
-
         .question_form{
             padding-left: 5%;
             padding-right: 5%;
@@ -267,6 +252,22 @@ if($r3!=null)
             padding-bottom: 10px;
         }
     </style>
+    <style>
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+    margin: 2%;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+    padding: 2px 16px;
+}
+</style>
 </head>
 <body>
 
@@ -421,9 +422,27 @@ if($r3!=null)
           <div class="tab-pane fade show active" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
              <p><h1 align="center">No Courses Offered Yet</h1>
                 
-                <a href="#">
-                  <i class="fas fa-plus fa-9x"></i>
-                </a>
+                <div class="col-md-9 container">
+                <div class="row">   
+                <div><a href="createCourse.php">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a></div>
+                <div class="col-md-4 card" style="width:40%">
+                    <div class="container">
+                        <h4><b>Course 1</b></h4> 
+                        <p>Stream</p> 
+                    </div>
+                </div>
+                <div class="col-md-4 card" style="width:40% " margin="10%">
+                    <div class="container">
+                        <h4><b>Course 2</b></h4> 
+                        <p>Stream</p> 
+                    </div>
+                </div>
+                </div>
+
+
+
              </p>
           </div>
           <div class="tab-pane fade" id="nav-account" role="tabpanel" aria-labelledby="nav-account-tab">
