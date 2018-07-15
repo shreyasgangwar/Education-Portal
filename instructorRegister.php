@@ -1,3 +1,76 @@
+<?php
+require_once("conn.php");
+$name=$age=$contact=$email=$college=$qual=$pass=$re_pass=null;
+session_start();
+if(array_key_exists('submit', $_POST)){
+    if(isset($_POST['first_name']))
+        $name=$_POST['first_name'];
+    if(isset($_POST['age']))
+        $age=$_POST['age'];
+    if(isset($_POST['contact']))
+        $contact=$_POST['contact'];
+    if(isset($_POST['college']))
+        $college=$_POST['college'];
+    if(isset($_POST['qualification']))
+        $qual=$_POST['qualification'];
+    if(isset($_POST['email']))
+        $email=$_POST['email'];
+    if(isset($_POST['password']))
+        $pass=$_POST['password'];
+    if(isset($_POST['re-password']))
+        $re_pass=$_POST['re-password'];
+    
+    $filename = $_FILES["Upload"]['name'];
+    $filetmp = $_FILES["Upload"]['tmp_name'];
+    $filesize = $_FILES["Upload"]['size'];
+    $file_basename = basename($_FILES["Upload"]['name']);
+    $dir="images/";
+    $final_dir=$dir.$file_basename; 
+    if (strlen($contact)<10)
+    {
+        $error.="Please Enter valid number";
+    }
+    else if($pass!=$re_pass){
+        $error.= " Passwords do not match";
+    }
+    else if($filesize >1000000)
+    {
+        $error.="File size too large";
+    }
+    else if (mysqli_num_rows($link->query("SELECT * FROM instructor WHERE email='$email'"))>0)
+    {
+        $error.="Email already exist. Try another";
+    }
+    else{
+        move_uploaded_file($filetmp,$final_dir);
+        $iquery="INSERT INTO image(image_name,image_path) VALUES ('$filename','$final_dir');";
+        $result1=$link->query($iquery);
+        $fetchid = null;
+        $fetchid="SELECT * FROM image WHERE image_path ='$final_dir' ;";
+        $result2=$link->query($fetchid);
+        $row = $result2->fetch_assoc();
+        $id1 = $row["id"];
+        $pass=md5($pass);
+        $query="INSERT INTO instructor(name, dob, contact,email, college,qualification,password,image_id) VALUES ('$name','$age','$contact','$email','$college','$qual','$pass','$id1')";
+        $result=mysqli_query($link, $query);
+        if(!$result){
+            $error.=" Some error in database connection:". mysqli_error($link);
+        }
+        else{
+            $error="Form submitted successfully !";
+            session_start("email");
+            $_SESSION['email'] = $email;
+            $_SESSION['loggedin'] = true;
+            if(isset($_POST['remember']))
+            {
+                setcookie('email',$mail,'time()*60*60*7');
+                setcookie('password',$pass,'time()*60*60*7');
+            }
+            header("location: instructorDashboard.php");
+        }
+    }
+}
+?>
 <html>
     <head>
         <title>Educot-hire</title>
@@ -35,6 +108,33 @@
 			background: #ffffff;
 		}
   </style>
+  <style>
+        .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
+        .input-block-level{display:block;width:100%;min-height:30px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+        .btn-file{overflow:hidden;position:relative;vertical-align:middle;}.btn-file>input{position:absolute;top:0;right:0;margin:0;opacity:0;filter:alpha(opacity=0);transform:translate(-300px, 0) scale(4);font-size:23px;direction:ltr;cursor:pointer;}
+        .fileupload{margin-bottom:9px;}.fileupload .uneditable-input{display:inline-block;margin-bottom:0px;vertical-align:middle;cursor:text;}
+        .fileupload .thumbnail{overflow:hidden;display:inline-block;margin-bottom:5px;vertical-align:middle;text-align:center;}.fileupload .thumbnail>img{display:inline-block;vertical-align:middle;max-height:100%;}
+        .fileupload .btn{vertical-align:middle;}
+        .fileupload-exists .fileupload-new,.fileupload-new .fileupload-exists{display:none;}
+        .fileupload-inline .fileupload-controls{display:inline;}
+        .fileupload-new .input-append .btn-file{-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0;}
+        .thumbnail-borderless .thumbnail{border:none;padding:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
+        .fileupload-new.thumbnail-borderless .thumbnail{border:1px solid #ddd;}
+        body{
+            font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+            text-align:center;
+        }
+        .navbar {
+            background: rgba(0, 0, 0, 0.78); //NON-IE
+        }
+        .file-field.big .file-path-wrapper {
+            height: 3.2rem; }
+        .file-field.big .file-path-wrapper .file-path {
+            height: 3rem; }
+        footer{
+            background: #ffffff;
+        }
+    </style>
     </head>
 <body>
     
@@ -106,14 +206,36 @@
                       <a class="nav-link divider" href="instructorRegister.php"><i class="fa fa-envelope" aria-hidden="true"></i> Instructors</a>
             
                   </li>              
-          
-          <a href="login.php" class="btn btn-primary" type="button">Login/SignUp</a>
-          
+                  <?php if(null==$_SESSION){?>
+                      <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
+                  <?php } else { ?>
 
-                  
-                  
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
+                              <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
+                          </a>
 
-   
+                          <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
+                              <div class="container">
+                                  <div class="row">
+                                      <div class="col-md-3">
+                                          <span class="text-uppercase">DETAILS</span>
+                                          <div class="dropdown-divider"></div>
+                                          <ul class="nav flex-column">
+                                              <li class="dropdown-item">
+                                                  <a class="" href="logout.php">Logout</a>
+                                              </li>
+                                              <li class="dropdown-item">
+                                                  <a class="" href="#">Recent Details</a>
+                                              </li>
+
+                                          </ul>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </li><?php } ?>
+
               </ul>
   
           </div>
@@ -132,34 +254,59 @@
 	<section class="hire-form-container">
 			<div class="hire-form-contain">
 			<h1>Register with us</h1><br/>
-				<form>
+			<form method="post" id = "instructorForm" class="form-signin" enctype="multipart/form-data">
+            <?php
+            if($error!="")
+            {
+                echo '<div class="alert alert-danger" role="alert">'.$error.'</div><br>';
+            }
+            ?>
   <div class="row">
     <div class="col-md-6">
-      <input type="text" class="form-control" placeholder="First name*">
+      <input type="text" class="form-control" placeholder="First Name*" name="first_name">
 	  
     </div>
     <div class="col-md-6">
-      <input type="text" class="form-control" placeholder="Age*">
+      <input type="date" class="form-control" placeholder="DOB*" name="dob">
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      <input type="text" class="form-control" placeholder="Phone number/Permanent Whatsapp number*">
+      <input type="number" class="form-control" placeholder="Phone/Whatsapp Number*" name="contact">
     </div>
     <div class="col-md-6">
-      <input type="text" class="form-control" placeholder="Mail ID*">
+      <input type="email" class="form-control" placeholder="Mail ID*" name="email">
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      <input type="text" class="form-control" placeholder="College*">
+      <input type="text" class="form-control" placeholder="College*" name="college">
     </div>
     <div class="col-md-6">
-      <input type="text" class="form-control" placeholder="Qualification*">
+      <input type="text" class="form-control" placeholder="Qualification*" name="qualification">
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6">
+      <input type="password" class="form-control" placeholder="Password*" name="password">
+    </div>
+    <div class="col-md-6">
+      <input type="password" class="form-control" placeholder="Re-Password*" name="re-password">
+    </div>
+  </div>
+  <div class="container">
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                <span class="btn btn-outline-danger btn-file">
+                <span class="fileupload-new">Upload Your Company Logo</span>
+                <span class="fileupload-exists">Upload Your Company Logo</span>
+                <input type="file" name="Upload" required>
+                </span>
+                    <span class="fileupload-preview"></span>
+                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                </div>
+            </div>
   
-  <button type="submit" class="btn btn-outline-danger">Submit</button>
+  <button type="submit" name="submit" class="btn btn-outline-danger">Submit</button>
 </form>
 			</div>
 	</section>
@@ -328,5 +475,81 @@
 
 
     </script>
+    
+<script>
+    var file = undefined;
+    ! function(e) {
+        var t = function(t, n) {
+            this.$element = e(t), this.type = this.$element.data("uploadtype") || (this.$element.find(".thumbnail").length > 0 ? "image" : "file"), this.$input = this.$element.find(":file");
+            if (this.$input.length === 0) return;
+            this.name = this.$input.attr("name") || n.name, this.$hidden = this.$element.find('input[type=hidden][name="' + this.name + '"]'), this.$hidden.length === 0 && (this.$hidden = e('<input type="hidden" />'), this.$element.prepend(this.$hidden)), this.$preview = this.$element.find(".fileupload-preview");
+            var r = this.$preview.css("height");
+            this.$preview.css("display") != "inline" && r != "0px" && r != "none" && this.$preview.css("line-height", r), this.original = {
+                exists: this.$element.hasClass("fileupload-exists"),
+                preview: this.$preview.html(),
+                hiddenVal: this.$hidden.val()
+            }, this.$remove = this.$element.find('[data-dismiss="fileupload"]'), this.$element.find('[data-trigger="fileupload"]').on("click.fileupload", e.proxy(this.trigger, this)), this.listen()
+        };
+        t.prototype = {
+            listen: function() {
+                this.$input.on("change.fileupload", e.proxy(this.change, this)), e(this.$input[0].form).on("reset.fileupload", e.proxy(this.reset, this)), this.$remove && this.$remove.on("click.fileupload", e.proxy(this.clear, this))
+            },
+            change: function(e, t) {
+                if (t === "clear") return;
+                var n = e.target.files !== undefined ? e.target.files[0] : e.target.value ? {
+                    name: e.target.value.replace(/^.+\\/, ""),
+                    size: e.target.value.size,
+                } : null;
+                if (!n) {
+                    this.clear();
+                    return
+                }
+                this.$hidden.val(""),
+                    this.$hidden.attr("name", ""),
+                    this.$input.attr("name", this.name);
+                if (typeof FileReader != "undefined") {
+                    var r = new FileReader,
+                        i = this.$preview,
+                        s = this.$element;
+                    r.onload = function(e) {
+                        var result = {
+                            name: n.name,
+                            data: e.target.result,
+                            size: n.size,
+                        }
+                        i.text(result.name), s.addClass("fileupload-exists").removeClass("fileupload-new")
+                    }, r.readAsDataURL(n)
+                } else this.$preview.text(n.name), this.$element.addClass("fileupload-exists").removeClass("fileupload-new")
+            },
+            clear: function(e) {
+                this.$hidden.val(""), this.$hidden.attr("name", this.name), this.$input.attr("name", "");
+                if (navigator.userAgent.match(/msie/i)) {
+                    var t = this.$input.clone(!0);
+                    this.$input.after(t), this.$input.remove(), this.$input = t
+                } else this.$input.val("");
+                this.$preview.html(""), this.$element.addClass("fileupload-new").removeClass("fileupload-exists"), e && (this.$input.trigger("change", ["clear"]), e.preventDefault())
+                file = undefined;
+            },
+            reset: function(e) {
+                this.clear(), this.$hidden.val(this.original.hiddenVal), this.$preview.html(this.original.preview), this.original.exists ? this.$element.addClass("fileupload-exists").removeClass("fileupload-new") : this.$element.addClass("fileupload-new").removeClass("fileupload-exists")
+            },
+            trigger: function(e) {
+                this.$input.trigger("click"), e.preventDefault()
+            }
+        }, e.fn.fileupload = function(n) {
+            return this.each(function() {
+                var r = e(this),
+                    i = r.data("fileupload");
+                i || r.data("fileupload", i = new t(this, n)), typeof n == "string" && i[n]()
+            })
+        }, e.fn.fileupload.Constructor = t, e(document).on("click.fileupload.data-api", '[data-provides="fileupload"]', function(t) {
+            var n = e(this);
+            if (n.data("fileupload")) return;
+            n.fileupload(n.data());
+            var r = e(t.target).closest('[data-dismiss="fileupload"],[data-trigger="fileupload"]');
+            r.length > 0 && (r.trigger("click.fileupload"), t.preventDefault())
+        })
+    }(window.jQuery)
+</script>
     </body>
 </html>	

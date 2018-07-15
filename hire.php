@@ -17,7 +17,6 @@ if(array_key_exists('submit', $_POST)){
         $pass=$_POST['password'];
     if(isset($_POST['re_password']))
         $re_pass=$_POST['re_password'];
-
     $filename = $_FILES["Upload"]['name'];
     $filetmp = $_FILES["Upload"]['tmp_name'];
     $filesize = $_FILES["Upload"]['size'];
@@ -41,6 +40,7 @@ if(array_key_exists('submit', $_POST)){
         $error.="Email already exist. Try another";
     }
     else{
+        move_uploaded_file($filetmp,$final_dir);
         $iquery="INSERT INTO image(image_name,image_path) VALUES ('$filename','$final_dir');";
         $result1=$link->query($iquery);
         $fetchid = null;
@@ -103,22 +103,17 @@ if(array_key_exists('submit', $_POST)){
         .fileupload-new .input-append .btn-file{-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0;}
         .thumbnail-borderless .thumbnail{border:none;padding:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
         .fileupload-new.thumbnail-borderless .thumbnail{border:1px solid #ddd;}
-
         body{
             font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
             text-align:center;
         }
         .navbar {
-
-
             background: rgba(0, 0, 0, 0.78); //NON-IE
-
         }
         .file-field.big .file-path-wrapper {
             height: 3.2rem; }
         .file-field.big .file-path-wrapper .file-path {
             height: 3rem; }
-
         footer{
             background: #ffffff;
         }
@@ -195,34 +190,35 @@ if(array_key_exists('submit', $_POST)){
 
         </li>
         <?php if(null==$_SESSION){?>
-            <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
-        <?php } else { ?>
+                      <a href="login.php"  class="btn btn-primary" type="button">Login/Sign Up</a>
+                  <?php } else { ?>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
-                    <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
-                </a>
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px">
+                              <i class="fa fa-user" aria-hidden="true"></i> ACCOUNT
+                          </a>
 
-                <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <span class="text-uppercase">DETAILS</span>
-                                <div class="dropdown-divider"></div>
-                                <ul class="nav flex-column">
-                                    <li class="dropdown-item">
-                                        <a class="" href="logout.php">Logout</a>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <a class="" href="#">Recent Details</a>
-                                    </li>
+                          <div class="dropdown-menu row" aria-labelledby="navbarDropdown">
+                              <div class="container">
+                                  <div class="row">
+                                      <div class="col-md-3">
+                                          <span class="text-uppercase">DETAILS</span>
+                                          <div class="dropdown-divider"></div>
+                                          <ul class="nav flex-column">
+                                              <li class="dropdown-item">
+                                                  <a class="" href="logout.php">Logout</a>
+                                              </li>
+                                              <li class="dropdown-item">
+                                                  <a class="" href="#">Recent Details</a>
+                                              </li>
 
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li><?php } ?>
+                                          </ul>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </li><?php } ?>
+
 
     </ul>
 </div>
@@ -348,23 +344,17 @@ if(array_key_exists('submit', $_POST)){
 <script type="text/javascript">
     function checkScroll(){
         var startY = $('.navbar').height() * 2; //The point where the navbar changes in px
-
         if($(window).scrollTop() > startY){
             $('.navbar').addClass("scrolled");
         }else{
             $('.navbar').removeClass("scrolled");
         }
     }
-
-
-
     if($('.navbar').length > 0){
         $(window).on("scroll load resize", function(){
             checkScroll();
-
         });
     }
-
     $('.navbar-toggler').click(function(){
         var startY = $('.navbar').height() * 2;
         if($(window).scrollTop() < startY){
@@ -383,7 +373,6 @@ if(array_key_exists('submit', $_POST)){
             $(this).next().text(dflt);
         }
     });
-
 </script>
 <script>
     var file = undefined;
